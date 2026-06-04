@@ -1,6 +1,6 @@
 {
   "name": "str-investment-analyzer",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Analyze short-term-rental (Airbnb/VRBO) property investments by city: cash flow, cash-on-cash, cap rate, break-even occupancy, and a hold-period return for the horizon you pick. Thin orchestration over the public planfi MCP (https://ai.planfi.app/mcp).",
   "license": "MIT",
   "author": {
