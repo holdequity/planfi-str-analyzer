@@ -1,5 +1,6 @@
 ---
 name: str-investment-analyzer
+version: 1.0.1
 description: Analyze short-term-rental (Airbnb/VRBO) property investments by city. Use whenever someone wants to evaluate buying an Airbnb / short-term rental / STR in a specific market — e.g. "analyze an Airbnb in Wilmington NC for $500k", "is a STR in Gatlinburg a good investment?", "cash-on-cash and hold-period return on a vacation rental".
 ---
 
@@ -70,7 +71,8 @@ Optional overrides (only when the user specifies): `nightly_rate`, `occupancy_ra
 bundled values), `down_payment_percent` (0.20), `closing_costs_percent` (0.03), `mortgage_rate`
 (0.07), `mortgage_term_years` (30), `furniture_cost` (15000), `cleaning_fee`, `monthly_property_tax`,
 `monthly_insurance`, `monthly_hoa`, `monthly_utilities`, `platform_fee_percent` (0.17),
-`annual_maintenance_percent` (0.01).
+`annual_maintenance_percent` (0.01), `index_return` (0.07 — the broad-index real return used for the
+always-on opportunity-cost comparison; raise/lower it only if the user has a specific expected return).
 
 ### If the market isn't covered (`needs_market_data: true`)
 `forecast_str_market` returns a soft `needs_market_data` envelope with `suggestions` (nearest
@@ -111,10 +113,24 @@ From `forecast_str_market`:
   `loan_amount`, `monthly_mortgage`.
 - **hold_return** — `hold_years`, `total_return_pct`, `annualized_return_pct` (+ `annualized_method`:
   IRR or CAGR), `total_profit`, `sale_price`, `net_sale_proceeds`, `initial_cash_invested`,
-  `total_rental_cash_flow`. (`equity_at_sale` is NOT returned here — it is only available via
-  `analyze_property_return`.) **Only feature this if the user plans to sell.** If they're holding
-  indefinitely, either omit it or show it as an explicit "if you exited at year N…" illustration,
-  clearly labeled as hypothetical.
+  `total_rental_cash_flow`, and **`opportunity_cost`** (see below). (`equity_at_sale` is NOT returned
+  here — it is only available via `analyze_property_return`.) **Only feature the sale-based return if
+  the user plans to sell.** If they're holding indefinitely, either omit it or show it as an explicit
+  "if you exited at year N…" illustration, clearly labeled as hypothetical.
+
+**ALWAYS present the opportunity-cost comparison.** Both `forecast_str_market` (inside `hold_return`)
+and `analyze_property_return` return an `opportunity_cost` block. Frame it exactly as: "Instead of
+buying the STR for N years, you could park the SAME cash in a ~7% index fund for the SAME N years —
+which wins?" Read and present:
+- `index_terminal` (the index-fund ending wealth) vs `str_terminal` (the STR ending wealth: net sale
+  proceeds + each year's net cash flow reinvested at the index rate — apples-to-apples),
+- `winner` (`str` / `index` / `tie`) and `delta` (str_terminal − index_terminal),
+- `str_multiple` and `index_multiple` (ending wealth ÷ initial cash),
+- `breakeven_index_return` if non-null (the index return at which the two tie).
+Then ALWAYS carry the honest `note`: the comparison is NOT risk-adjusted — the STR's edge comes from
+leverage + sweat equity (self-management) and carries concentration, liquidity, and regulatory risk a
+diversified passive index fund does not; appreciation is an assumption; figures are pre-tax. Use the
+configurable `index_return` if the user has a specific expected return.
 
 Always lead with realistic **cash-on-cash**, **cap rate**, and **break-even occupancy** (vs the
 market's actual occupancy). Add the **annualized hold/total return** as the headline ONLY when a sale
@@ -138,4 +154,7 @@ seasonal markets, that appreciation is an assumption, and that self-managing is 
 - All figures are real (inflation-adjusted) dollars.
 - The bundled dataset (AirROI/AirDNA/Rabbu public reports) is labeled with `as_of`; never present it
   as live/current quotes. Web-researched numbers are estimates too — always cite source + date.
+- The opportunity-cost (STR vs index fund) comparison is NOT risk-adjusted: it ignores the STR's
+  concentration, liquidity, and regulatory risk and treats appreciation as a given. Present it as a
+  matched-horizon wealth comparison, not a risk-equivalent one.
 - Not financial advice. Planning estimates only.
