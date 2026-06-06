@@ -19,6 +19,17 @@
         "name": "holdequity",
         "url": "https://github.com/holdequity"
       }
+    },
+    {
+      "name": "financial-forecast",
+      "source": "./skills/financial-forecast",
+      "description": "Build a complete FIRE / financial forecast: net-worth projection, FIRE age, Monte Carlo success rate, insights, action plan, and what-if scenario comparisons. Thin orchestration over the planfi MCP.",
+      "version": "1.0.0",
+      "license": "MIT",
+      "author": {
+        "name": "holdequity",
+        "url": "https://github.com/holdequity"
+      }
     }
   ]
 }
