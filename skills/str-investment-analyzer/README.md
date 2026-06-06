@@ -87,12 +87,12 @@ Restart Claude Code (or start a new session). The skill auto-loads by its descri
 ## How it works (call flow)
 
 1. (optional) `list_str_markets` → confirm the city is covered / suggest one.
-2. `forecast_str_market { location, purchase_price, hold_years, annual_appreciation,
-   management_fee_percent }` → one-shot: bundled rate/occupancy + cash flow + hold return.
-   The skill **asks your hold horizon** and passes it as `hold_years` (it does not assume 10).
-3. (if asked) re-run with `management_fee_percent: 0` → self-managed comparison (usually the single
-   biggest swing).
-4. (advanced) `analyze_property_return` with `sale_price_override` for a reno/forced-exit scenario.
+2. `forecast_str_market { location, purchase_price }` → one-shot: bundled rate/occupancy, cash-flow
+   scenarios, break-even, a top-level risk flag, the managed-vs-self comparison (`self_managed_comparison`,
+   no second call), data provenance, and the hold-period return. Pass `hold_years` only if you have a
+   sale horizon — omit it for an indefinite buy-and-hold and the server labels the sale return as an
+   illustrative hypothetical (it never silently assumes 10 years).
+3. (advanced) `analyze_property_return` with `sale_price_override` for a reno/forced-exit scenario.
 
 If the market isn't in the bundled dataset, the skill surfaces the `needs_market_data` suggestions
 and asks before web-researching ADR + occupancy and re-calling with explicit `nightly_rate` +
