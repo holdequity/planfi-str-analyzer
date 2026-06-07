@@ -82,6 +82,13 @@ Never invent numbers or pick a nearby market without confirming.
 
 Surface the server's fields as-is — do not relabel, recompute, or add your own thresholds:
 
+- **`assumed_defaults[]`** — every analysis tool (`forecast_str_market`, `analyze_str_property`,
+  `analyze_property_return`) returns a structured `assumed_defaults` array of
+  `{ field, assumed_value, note }` for each forecast-driving input left at its server default
+  (e.g. `down_payment_percent`, `mortgage_rate`, `management_fee_percent`, and — when you omit
+  `hold_years` — the illustrative `hold_years`). Read these back to the user so they can confirm
+  or override them; they are NOT the same as the static prose in `disclosures.key_assumptions`,
+  and `disclosures.not_advice` is a boolean flag, not a message.
 - **`data_provenance`** — `origin`, `nightly_rate`, `occupancy_rate`, `source`, `source_url` (cite it),
   `as_of`, `confidence`. Present where the numbers came from exactly as returned. Read-rule: lead with
   the lower of `data_provenance.confidence` (match quality) and `disclosures.confidence` (forecast
