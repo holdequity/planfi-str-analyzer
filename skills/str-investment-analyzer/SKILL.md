@@ -115,6 +115,12 @@ Surface the server's fields as-is — do not relabel, recompute, or add your own
    scenarios, risk, self-managed comparison, hold return.
 3. (advanced) `analyze_property_return` with `sale_price_override` for a reno/forced-exit scenario.
 
+## Related skills
+- **long-term-rental-analyzer** — the buy-and-hold / long-term-rental complement to this nightly-STR
+  skill: year-1 Schedule E P&L, 27.5-yr depreciation shelter, §1250 recapture, NIIT, and 1031
+  deferral (the after-tax layer on a non-nightly rental).
+- **rent-vs-buy** — owning a primary residence vs renting + investing the difference.
+
 ## Notes
 - All decimals are fractions, not percents (20% → `0.20`).
 - Surface the server's `disclosures` and `data_provenance` as-is; never present bundled or researched
