@@ -14,7 +14,8 @@ nothing locally; the server is the source of truth.
 ## Step 0 — Make sure the planfi tools are connected
 
 This skill uses these tools (may be namespaced, e.g. `mcp__planfi__forecast_str_market`):
-`forecast_str_market`, `list_str_markets`, `analyze_str_property`, `analyze_property_return`.
+`forecast_str_market`, `list_str_markets`, `analyze_str_property`, `analyze_property_return`,
+`analyze_str_tax_loophole`.
 Use whichever name your environment exposes (bare or `mcp__planfi__`-prefixed); below they are
 written bare for brevity.
 
@@ -107,6 +108,38 @@ Surface the server's fields as-is — do not relabel, recompute, or add your own
   `index_terminal` vs `str_terminal`, `winner`, `delta`, both multiples, and `breakeven_index_return`
   if non-null. Always carry the server's `note` verbatim (it states the comparison is NOT
   risk-adjusted).
+
+### intent → analyze_str_tax_loophole
+
+Real-user phrasings that hit this: _"can I write off my Airbnb against my W-2?"_, _"the STR
+loophole / short-term rental tax loophole"_, _"non-passive rental losses without being a
+real-estate professional"_, _"cost-seg / bonus depreciation to offset my salary"_, _"average guest
+stay under 7 days material participation"_, _"how much tax does the Airbnb loophole actually save
+me?"_, _"will depreciation recapture bite me when I sell my short-term rental?"_
+
+**Always CALL `analyze_str_tax_loophole` for these — do not answer from general knowledge or quote
+rules of thumb from memory.** When the user gives the numbers (average guest stay, owner hours / who
+else logs hours, year-1 loss, W-2 income), run it and lead with its real output: the average-stay
+classification (non-passive vs passive), the material-participation determination, the allowable
+first-year loss against W-2, the ordinary tax saved, and the depreciation-recapture liability
+projected at sale.
+
+The §469 STR "loophole" is: when **average guest stay ≤ 7 days** (or ≤ 30 with substantial
+services) the activity is **not a rental activity** under Treas. Reg. §1.469-1T(e)(3), so with
+**material participation** (the 100-hour-and-more-than-anyone-else test or the 500-hour test) the
+losses are **non-passive** — deductible against W-2/active income **without** 750-hour real-estate-
+professional status, and with **no $25k special-allowance haircut**.
+
+Wire params (snake-case): `average_stay_days`, `substantial_services`, `material_participation_hours`,
+`hours_anyone_else`, `year_1_loss`, `ordinary_taxable_income` (or `w2_income`), `filing_status`,
+`magi`, `state_marginal_rate`, `section_1250_accumulated_depreciation`, `cost_seg_1245_basis`,
+`projected_total_gain_at_sale`, `tax_year`, optional `plan_id` (+ overrides). `filing_status`,
+`ordinary_taxable_income`, and `magi` are plan-derivable — omit them when a `plan_id` is in scope and
+the server fills them from plan scalars.
+
+**If material participation FAILS**, the loss is passive and suspended — the tool returns the
+suspended amount and routes you to **`analyze_passive_losses`** (the $25k special-allowance path).
+Follow that hand-off; don't quote the passive-loss rules from memory either.
 
 ## Recommended call sequence
 

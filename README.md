@@ -22,6 +22,11 @@ The skill calls these planfi MCP tools, served from `https://ai.planfi.app/mcp` 
   `nightly_rate`/`occupancy_rate`, plus the full STR expense set incl. `management_fee_percent`).
 - **`analyze_property_return`** — hold-period return with finer control (incl. `sale_price_override`
   for a forced/after-renovation exit price).
+- **`analyze_str_tax_loophole`** — the §469 short-term-rental "loophole": tests whether average guest
+  stay ≤ 7 days (non-rental classification) plus material participation makes your year-1
+  cost-seg/bonus-depreciation loss **non-passive** and deductible against W-2 income, quantifies the
+  ordinary tax saved, and projects the §1250/§1245 depreciation-recapture liability at sale. If
+  material participation fails it reports the suspended loss and routes to `analyze_passive_losses`.
 
 If the city is **covered** by the bundled dataset, rate + occupancy auto-populate server-side — no
 manual entry. If it's **not** covered, `forecast_str_market` returns `needs_market_data` with nearby
@@ -83,6 +88,8 @@ Restart Claude Code (or start a new session). The skill auto-loads by its descri
 - "is a short-term rental in Gatlinburg a good investment if I pay $650k and self-manage?"
 - "compare cash-on-cash for a $400k Airbnb in Scottsdale, managed vs self-managed, then show the
   return if I sold after 7 years at 2% appreciation"
+- "I make $300k W-2, my Airbnb's average guest stay is 4 nights, I logged 180 hours and a $120k
+  cost-seg loss — can I write that off against my salary, and what's the recapture when I sell?"
 
 ## How it works (call flow)
 
