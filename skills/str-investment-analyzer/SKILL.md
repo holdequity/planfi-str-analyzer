@@ -1,12 +1,12 @@
 ---
 name: str-investment-analyzer
-version: 1.1.1
+version: 1.1.2
 description: Analyze short-term-rental (Airbnb/VRBO) property investments by city. Use whenever someone wants to evaluate buying an Airbnb / short-term rental / STR in a specific market — e.g. "analyze an Airbnb in Wilmington NC for $500k", "is a STR in Gatlinburg a good investment?", "cash-on-cash and hold-period return on a vacation rental".
 ---
 
 # STR Investment Analyzer
 
-A thin orchestration layer over the **planfi MCP** (https://ai.planfi.app/mcp).
+A thin orchestration layer over the **planfi MCP** (https://ai.planfi.app/mcp/free).
 All math, market data, defaults, risk flags, and estimate provenance live **server-side** — this
 skill only gathers inputs, calls the tools, and surfaces what they return. It computes and decides
 nothing locally; the server is the source of truth.
@@ -22,10 +22,12 @@ written bare for brevity.
 If they're NOT available, tell the user to connect the MCP, then continue:
 
 ```
-claude mcp add --transport http planfi https://ai.planfi.app/mcp
+claude mcp add --transport http planfi https://ai.planfi.app/mcp/free
 ```
 
-(On claude.ai: add a custom connector pointing at https://ai.planfi.app/mcp.)
+> **Try free, then add your key.** The command above adds the **free** connector — `https://ai.planfi.app/mcp/free` (no key needed). Once you create an API key, add a **new** connector with the MCP url — `https://ai.planfi.app/mcp` — and authorize it with your key.
+
+(On claude.ai: add a custom connector pointing at https://ai.planfi.app/mcp/free.)
 
 > **Access — free for personal use.** The planfi MCP is free to try (a small monthly allowance, no key needed). Heavy automated abuse forced us to add limits — but it stays **free for personal use**: email **kam@rateapi.dev** and we'll send you a free API key, no charge. (Companies and commercial use have paid plans.) To use a key, pass it as an `Authorization: Bearer pft_…` header in your MCP client config.
 

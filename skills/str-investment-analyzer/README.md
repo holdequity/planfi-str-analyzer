@@ -12,7 +12,7 @@ inputs and calls the tools.
 
 ## What you need
 
-The skill calls these planfi MCP tools, served from `https://ai.planfi.app/mcp` (public, no auth):
+The skill calls these planfi MCP tools, served from `https://ai.planfi.app/mcp/free` (public, no auth):
 
 - **`forecast_str_market`** — the primary one-shot tool. Give it a covered city + price and it
   auto-populates nightly rate & occupancy from the bundled dataset (100+ markets) and returns the
@@ -38,11 +38,13 @@ for your exact market (labeled as estimates with source + date).
 If the planfi tools aren't connected yet, run:
 
 ```
-claude mcp add --transport http planfi https://ai.planfi.app/mcp
+claude mcp add --transport http planfi https://ai.planfi.app/mcp/free
 ```
 
+> **Try free, then add your key.** The command above adds the **free** connector — `https://ai.planfi.app/mcp/free` (no key needed). Once you create an API key, add a **new** connector with the MCP url — `https://ai.planfi.app/mcp` — and authorize it with your key.
+
 On **claude.ai**: Settings → Connectors → add a custom connector pointing at
-`https://ai.planfi.app/mcp` (no auth). The skill also reminds you to do this if the tools
+`https://ai.planfi.app/mcp/free` (no auth). The skill also reminds you to do this if the tools
 are missing when you invoke it.
 
 ## Install
